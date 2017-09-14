@@ -15,6 +15,8 @@ public class LinkedListImage implements CompressedImageInterface {
     }
 
     private Node[] image;
+    private int height;
+    private int width;
 
     private void constructor(boolean[][] grid, int width, int height) {
         image = new Node[height];
@@ -28,6 +30,9 @@ public class LinkedListImage implements CompressedImageInterface {
                 }
             }
         }
+
+        this.height = height;
+        this.width  = width;
     }
 
 	public LinkedListImage(String filename) throws FileNotFoundException
@@ -101,14 +106,49 @@ public class LinkedListImage implements CompressedImageInterface {
     
     public String toStringUnCompressed()
     {
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+        String output = new String();
+
+        output = output + Integer.toString(this.width) + ' ' + Integer.toString(this.height) + System.lineSeparator();
+        
+        for (int i = 0; i < this.height; i++) {
+            String line  = new String();
+            Node node = image[i];
+            int n = 0;
+
+            while (node.next != null) {
+                int start = node.index;
+                node = node.next;
+                int end = node.index;
+                node = node.next;
+
+                for (int j = n;   j < start; j++) { line = line + "0 "; }
+                for (int j = start; j < end; j++) { line = line + "1 "; }
+
+                n = end;
+            }
+
+            if (line != null && line.length() > 0) { line = line.substring(0, line.length() - 1); }
+            output = output + line + System.lineSeparator();
+        }
+
+        return output;
     }
     
     public String toStringCompressed()
     {
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+        String output = new String();
+        output = output + Integer.toString(this.width) + ' ' + Integer.toString(this.height) + System.lineSeparator();
+        
+        for (int i = 0; i < this.height; i++) {
+            String line  = new String();
+            Node node = image[i];
+            
+            while (node.next != null) { line = line + Integer.toString(node.index) + ' '; }
+            line = line + "-1";
+            output = output + line + System.lineSeparator();
+        }
+
+        return output;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
