@@ -76,8 +76,25 @@ public class LinkedListImage implements CompressedImageInterface {
 
     public int[] numberOfBlackPixels()
     {
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+		int[] ret = new int[this.height];
+
+        for (int i = 0; i < this.height; i++) {
+            Node node = this.image[i];
+            int n = 0;
+
+            while (node.next != null) {
+                int start =  node.index;
+                node = node.next;
+                int end = node.index;
+                node = node.next;
+
+                n = n + end - start + 1;
+            }
+
+            ret[i] = n;
+        }
+
+        return ret;
     }
     
     public void invert()
