@@ -1,16 +1,39 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class LinkedListImage implements CompressedImageInterface {
 
-	public LinkedListImage(String filename)
+    private void constructor(boolean[][] grid, int width, int height) {
+
+    }
+
+	public LinkedListImage(String filename) throws FileNotFoundException
 	{
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+        File file = new File(filename);
+		Scanner s = new Scanner(file);
+
+		int height, width;
+        width  = s.nextInt();
+        height = s.nextInt();
+        s.nextLine();
+
+        boolean[][] grid = new boolean[height][width];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = (s.nextInt() != 0);
+            }
+            s.nextLine();
+        }
+
+        constructor(grid, width, height);
 	}
 
     public LinkedListImage(boolean[][] grid, int width, int height)
     {
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+        constructor(grid, width, height);
     }
 
     public boolean getPixelValue(int x, int y)
@@ -67,7 +90,7 @@ public class LinkedListImage implements CompressedImageInterface {
 		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
     	// testing all methods here :
     	boolean success = true;
 
