@@ -62,10 +62,24 @@ public class LinkedListImage implements CompressedImageInterface {
         constructor(grid, width, height);
     }
 
-    public boolean getPixelValue(int x, int y)
+    public boolean getPixelValue(int x, int y) throws PixelOutOfBoundException
     {
-		//you need to implement this
-		throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+		Node node = image[x];
+        int n = 1;
+
+        while (node.next != null) {
+            int start = node.index;
+            node = node.next;
+            int end = node.index;
+            node = node.next;
+
+            if      (y <  start && y >= n  ) { return false; }
+            else if (y >= start && y <= end) { return  true; }
+
+            n = end + 1;
+        }
+
+        throw new PixelOutOfBoundException("Pixel coordinate out of range.");
     }
 
     public void setPixelValue(int x, int y, boolean val)
