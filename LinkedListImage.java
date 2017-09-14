@@ -5,8 +5,29 @@ import java.util.Scanner;
 
 public class LinkedListImage implements CompressedImageInterface {
 
-    private void constructor(boolean[][] grid, int width, int height) {
+    private class Node {
+        public int index =   -1;
+        public Node next = null;
 
+        public Node(int index) {
+            this.index = index;
+        }
+    }
+
+    private Node[] image;
+
+    private void constructor(boolean[][] grid, int width, int height) {
+        image = new Node[height];
+
+        for (int i = 0; i < height; i++) {
+            for (int j = width-1; j > -1; j--) {
+                if (grid[i][j]) {
+                    Node node = new Node(j);
+                    node.next = image[i];
+                    image[i] = node;
+                }
+            }
+        }
     }
 
 	public LinkedListImage(String filename) throws FileNotFoundException
