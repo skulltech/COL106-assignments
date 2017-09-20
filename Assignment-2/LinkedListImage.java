@@ -174,30 +174,33 @@ public class LinkedListImage implements CompressedImageInterface {
     {
         String output = new String();
 
-        output = output + Integer.toString(this.width) + ' ' + Integer.toString(this.height) + System.lineSeparator();
+        output = output + Integer.toString(this.width) + ' ' + Integer.toString(this.height) + ", ";
         
         for (int i = 0; i < this.height; i++) {
             String line  = new String();
             Node node = image[i];
             int n = 0;
+            int start, end = 0;
 
             while (node.next != null) {
-                int start = node.index;
+                start = node.index;
                 node = node.next;
-                int end = node.index;
+                end = node.index;
                 node = node.next;
 
-                for (int j = n;   j < start; j++) { line = line + "0 "; }
-                for (int j = start; j < end; j++) { line = line + "1 "; }
+                for (int j = n;   j < start; j++) { line = line + "1 "; }
+                for (int j = start; j < end; j++) { line = line + "0 "; }
 
                 n = end;
             }
 
+            for (int k = end; k < width; k++) { line = line + "1 "; }
+
             if (line != null && line.length() > 0) { line = line.substring(0, line.length() - 1); }
-            output = output + line + System.lineSeparator();
+            output = output + line + ", ";
         }
 
-        return output;
+        return output.substring(0, output.length() - 2);
     }
     
     public String toStringCompressed()
@@ -264,6 +267,8 @@ public class LinkedListImage implements CompressedImageInterface {
             return;
         }
 
+        System.out.print(img1.toStringUnCompressed());
+
 /*      // check Xor
         try
         {
@@ -303,7 +308,7 @@ public class LinkedListImage implements CompressedImageInterface {
             {
                 System.out.println("Errorrrrrrrr");
             }
-        }
+        }*/
 
         // check numberOfBlackPixels
         int[] img1_black = img1.numberOfBlackPixels();
@@ -316,7 +321,7 @@ public class LinkedListImage implements CompressedImageInterface {
             return;
         }
 
-        // check invert
+        /*// check invert
         img1.invert();
         for (int i = 0; i < 16; i++)
         {
@@ -387,7 +392,7 @@ public class LinkedListImage implements CompressedImageInterface {
         {
             System.out.println("performAnd or getPixelValue ERROR");
             return;
-        }
+        }*/
 
         // check toStringUnCompressed
         String img_ans_uncomp = "16 16, 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1, 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1, 1 1 1 0 0 0 0 0 1 1 1 1 1 1 1 1, 1 1 0 0 0 0 0 0 1 1 1 1 1 1 1 1, 1 1 0 1 1 1 0 0 1 1 1 1 1 1 1 1, 1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1, 1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1, 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1 1, 1 1 0 0 0 1 1 1 1 1 1 1 1 1 1 1, 1 1 0 0 1 1 1 1 1 1 1 1 1 1 0 0, 1 1 0 1 1 1 1 1 1 1 1 1 1 0 0 0, 1 1 1 1 1 1 1 1 1 1 1 0 0 0 1 1, 1 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1, 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1, 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1, 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1";
@@ -399,6 +404,6 @@ public class LinkedListImage implements CompressedImageInterface {
             return;
         }
         else
-            System.out.println("ALL TESTS SUCCESSFUL! YAYY!");*/
+            System.out.println("ALL TESTS SUCCESSFUL! YAYY!");
     }
 }
