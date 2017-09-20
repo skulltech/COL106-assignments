@@ -7,6 +7,7 @@ public class LinkedListImage implements CompressedImageInterface {
 
     private class Node {
         public int index =   -1;
+        public Node prev = null;
         public Node next = null;
 
         public Node(int index) {
@@ -56,6 +57,9 @@ public class LinkedListImage implements CompressedImageInterface {
                     en.next = image[i];
                     Node sn = new Node(start);
                     sn.next = en;
+
+                    image[i].prev = en;
+                    en.prev = sn;
 
                     image[i] = sn;
                     getend = true;
@@ -117,10 +121,43 @@ public class LinkedListImage implements CompressedImageInterface {
         return true;
     }
 
-    public void setPixelValue(int x, int y, boolean val)
+    public void setPixelValue(int x, int y, boolean val) throws PixelOutOfBoundException
     {
-        //you need to implement this
-        throw new java.lang.UnsupportedOperationException("Not implemented yet.");
+        if (x > height || y > width) { throw new PixelOutOfBoundException("Pixel coordinate out of range."); }
+
+        Node node = image[x];
+        int n = 1;
+
+        if (x > height || y > width) { throw new PixelOutOfBoundException("Pixel coordinate out of range."); }
+
+        while (node.next != null) {
+            Node startNode = node;
+            int start = startNode.index;
+            Node endNode = startNode.next;
+            int end = endNode.index;
+            node = endNode.next;
+
+            if      ((y <  start && y >= n  ) && !val) {
+                if (y == start -1) {
+                    Node sn = new Node(y);
+
+                }
+                Node sn = new Node(y);
+                startNode.next = sn;
+                Node en = new Node(y);
+                sn.next = en;
+                en.next = endNode;
+            }
+            else if ((y >= start && y <= end) &&  val) {
+                Node sn = new Node(y-1);
+                startNode.next = sn;
+                Node en = new Node(y+1);
+                sn.next = en;
+                en.next = endNode;
+            }
+
+            n = end + 1;
+        }
     }
 
     public int[] numberOfBlackPixels()
@@ -230,6 +267,15 @@ public class LinkedListImage implements CompressedImageInterface {
         // check constructor from file
         CompressedImageInterface img1 = new LinkedListImage("C:\\Users\\Sumit\\IdeaProjects\\DS-assignment-2\\src\\sampleInputFile.txt");
 
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                img1.setPixelValue(i, j, true);
+            }
+        }
+
+        System.out.println(img1.toStringUnCompressed());
+        System.out.println(img1.toStringCompressed());
+
         // check toStringCompressed
         String img1_compressed = img1.toStringCompressed();
         String img_ans = "16 16, -1, 5 7 -1, 3 7 -1, 2 7 -1, 2 2 6 7 -1, 6 7 -1, 6 7 -1, 4 6 -1, 2 4 -1, 2 3 14 15 -1, 2 2 13 15 -1, 11 13 -1, 11 12 -1, 10 11 -1, 9 10 -1, 7 9 -1";
@@ -295,7 +341,7 @@ public class LinkedListImage implements CompressedImageInterface {
         {
             System.out.println("performXor or getPixelValue ERROR");
             return;
-        }
+        }*/
 
         // check setPixelValue
         for (int i = 0; i < 16; i++)
@@ -308,7 +354,7 @@ public class LinkedListImage implements CompressedImageInterface {
             {
                 System.out.println("Errorrrrrrrr");
             }
-        }*/
+        }
 
         // check numberOfBlackPixels
         int[] img1_black = img1.numberOfBlackPixels();
