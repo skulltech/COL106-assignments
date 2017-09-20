@@ -100,19 +100,21 @@ public class LinkedListImage implements CompressedImageInterface {
         Node node = image[x];
         int n = 1;
 
+        if (x > height || y > width) { throw new PixelOutOfBoundException("Pixel coordinate out of range."); }
+
         while (node.next != null) {
             int start = node.index;
             node = node.next;
             int end = node.index;
             node = node.next;
 
-            if      (y <  start && y >= n  ) { return false; }
-            else if (y >= start && y <= end) { return  true; }
+            if      (y <  start && y >= n  ) { return  true; }
+            else if (y >= start && y <= end) { return false; }
 
             n = end + 1;
         }
 
-        throw new PixelOutOfBoundException("Pixel coordinate out of range.");
+        return true;
     }
 
     public void setPixelValue(int x, int y, boolean val)
@@ -218,7 +220,7 @@ public class LinkedListImage implements CompressedImageInterface {
         return output.substring(0, output.length() - 2);
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, PixelOutOfBoundException {
         // testing all methods here :
         boolean success = true;
 
@@ -227,7 +229,6 @@ public class LinkedListImage implements CompressedImageInterface {
 
         // check toStringCompressed
         String img1_compressed = img1.toStringCompressed();
-        System.out.print(img1_compressed);
         String img_ans = "16 16, -1, 5 7 -1, 3 7 -1, 2 7 -1, 2 2 6 7 -1, 6 7 -1, 6 7 -1, 4 6 -1, 2 4 -1, 2 3 14 15 -1, 2 2 13 15 -1, 11 13 -1, 11 12 -1, 10 11 -1, 9 10 -1, 7 9 -1";
         success = success && (img_ans.equals(img1_compressed));
 
@@ -263,7 +264,7 @@ public class LinkedListImage implements CompressedImageInterface {
             return;
         }
 
-        // check Xor
+/*      // check Xor
         try
         {
             img1.performXor(img2);       
@@ -398,6 +399,6 @@ public class LinkedListImage implements CompressedImageInterface {
             return;
         }
         else
-            System.out.println("ALL TESTS SUCCESSFUL! YAYY!");
+            System.out.println("ALL TESTS SUCCESSFUL! YAYY!");*/
     }
 }
