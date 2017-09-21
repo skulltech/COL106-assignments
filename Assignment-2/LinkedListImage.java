@@ -101,10 +101,10 @@ public class LinkedListImage implements CompressedImageInterface {
 
     public boolean getPixelValue(int x, int y) throws PixelOutOfBoundException
     {
+        if (x > height || y > width) { throw new PixelOutOfBoundException("Pixel coordinate out of range."); }
+
         Node node = image[x];
         int n = 1;
-
-        if (x > height || y > width) { throw new PixelOutOfBoundException("Pixel coordinate out of range."); }
 
         while (node.next != null) {
             int start = node.index;
@@ -441,6 +441,7 @@ public class LinkedListImage implements CompressedImageInterface {
 
         return output.substring(0, output.length() - 2);
     }
+
 
     public static void main(String[] args) throws FileNotFoundException, PixelOutOfBoundException {
         // testing all methods here :
