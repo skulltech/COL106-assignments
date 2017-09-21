@@ -448,7 +448,7 @@ public class LinkedListImage implements CompressedImageInterface {
         boolean success = true;
 
         // check constructor from file
-        CompressedImageInterface img1 = new LinkedListImage("C:\\Users\\Sumit\\IdeaProjects\\DS-assignment-2\\src\\sampleInputFile.txt");
+        CompressedImageInterface img1 = new LinkedListImage("sampleInputFile.txt");
 
         // check toStringCompressed
         String img1_compressed = img1.toStringCompressed();
