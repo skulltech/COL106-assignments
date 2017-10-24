@@ -85,6 +85,32 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
         }
     }
 
+    private Boolean contains (Node node, Key key) {
+        for (Entry entry: node.entries) { if (entry.key.compareTo(key) == 0) return true; }
+        return false;
+    }
+
+    private Node leaf(Node root, Key key) {
+        if (root.children.size() == 0) return root;
+
+        Entry first = root.entries.get(0);
+        Entry last  = root.entries.get(root.m - 1);
+
+        if (first.key.compareTo(key) >= 0) {
+            return leaf(root.children.get(0), key);
+        }
+
+        for (int i=0; i < root.m-1; i++) {
+            Entry entry = root.entries.get(i);
+            Entry next  = root.entries.get(i+1);
+
+            if (entry.key.compareTo(key) <= 0 && next.key.compareTo(key) >= 0) { return leaf(root.children.get(i+1), key); };
+        }
+
+        if (last.key.compareTo(key) <= 0) { return leaf(root.children.get(root.m), key); }
+        return null;
+    }
+
     @Override
     public void insert(Key key, Value val) {
 
