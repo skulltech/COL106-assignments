@@ -24,6 +24,7 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
 
     private class Node {
         private int m = 0; /* Number of Key-value pairs in the given node */
+        private Node parent;
         private List<Entry> entries  = new ArrayList<Entry>();
         private List<Node>  children = new ArrayList<Node> ();
     }
@@ -111,9 +112,45 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
         return null;
     }
 
+    private int indexOf(List<Entry> entries, Key key) {
+        List<Key> keys = new ArrayList<Key>();
+        for (Entry entry: entries) { keys.add(entry.key); }
+        return keys.indexOf(key);
+    }
+
+    private void insert(Node node, Key key, Value val) {
+        int index = indexOf(node.entries, key);
+        if (index != -1) node.entries.add(index, new Entry(key, val)) ;
+        else {
+            if (node.entries.get(0).key.compareTo(key) > 0) node.entries.add(0, new Entry(key, val));
+            else node.entries.add(new Entry(key, val));
+        }
+        node.m ++;
+    }
+
     @Override
     public void insert(Key key, Value val) {
+        Node leaf = leaf(this.root, key);
 
+        insert(leaf, key, val);
+        if (leaf.m > B-1) { split(leaf); }
+    }
+
+    private void split(Node node) {
+        Node left   = new Node();
+        Node right  = new Node();
+        Node parent = new Node();
+
+        left.entries = node.entries.subList(0, ((this.B/2) - 1));
+        left.m = B/2;
+        left.parent = node.parent;
+        right.entries = node.entries.subList((this.B/2) + 1, this.B-1);
+        right.m = B/2 - 1;
+        right.parent = node.parent;
+
+        Entry middle = node.entries.get(this.B/2);
+        insert(parent, middle.key, middle.val);
+        if (parent.m > B-1) { split(parent); }
     }
 
     @Override
