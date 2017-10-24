@@ -23,7 +23,7 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
     }
 
     private class Node {
-        private int m = 0;
+        private int m = 0; /* Number of Key-value pairs in the given node */
         private List<Entry> entries  = new ArrayList<Entry>();
         private List<Node>  children = new ArrayList<Node> ();
     }
@@ -51,12 +51,43 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
 
     @Override
     public List<Value> search(Key key) throws IllegalKeyException {
-        throw new RuntimeException("Not Implemented");
+        if (key == null) throw new IllegalKeyException();
+
+        List<Value> values = new ArrayList<Value>();
+        search(this.root, key, values);
+        return values;
+    }
+
+    private void search(Node root, Key key, List<Value> values) {
+        Entry first = root.entries.get(0);
+        Entry last  = root.entries.get(root.m - 1);
+        int comp;
+
+        if (first.key.compareTo(key) >= 0) {
+            search(root.children.get(0), key, values);
+        }
+
+        comp = last.key.compareTo(key);
+        if (comp <= 0) {
+            search(root.children.get(root.m), key, values);
+            if (comp == 0) { values.add(last.val); }
+        }
+
+        for (int i=0; i < root.m-1; i++) {
+            Entry entry = root.entries.get(i);
+            Entry next  = root.entries.get(i+1);
+            comp = entry.key.compareTo(key);
+
+            if (comp <= 0 && next.key.compareTo(key) >= 0) {
+                search(root.children.get(i+1), key, values);
+                if (comp == 0) { values.add(entry.val); }
+            };
+        }
     }
 
     @Override
     public void insert(Key key, Value val) {
-        throw new RuntimeException("Not Implemented");
+
     }
 
     @Override
