@@ -1,8 +1,5 @@
 package col106.a3;
 
-import col106.a3.BTree;
-import col106.a3.DuplicateBTree;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

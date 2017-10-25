@@ -122,7 +122,10 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
         int index = indexOf(node.entries, key);
         if (index != -1) node.entries.add(index, new Entry(key, val)) ;
         else {
-            if (node.entries.get(0).key.compareTo(key) > 0) node.entries.add(0, new Entry(key, val));
+            if (node.entries.size() != 0) {
+                if (node.entries.get(0).key.compareTo(key) > 0) node.entries.add(0, new Entry(key, val));
+                else node.entries.add(new Entry(key, val));
+            }
             else node.entries.add(new Entry(key, val));
         }
         node.m ++;
@@ -141,10 +144,10 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
         Node right  = new Node();
         Node parent = new Node();
 
-        left.entries = node.entries.subList(0, ((this.B/2) - 1));
+        left.entries = node.entries.subList(0, this.B/2);
         left.m = B/2;
         left.parent = node.parent;
-        right.entries = node.entries.subList((this.B/2) + 1, this.B-1);
+        right.entries = node.entries.subList((this.B/2) + 1, this.B);
         right.m = B/2 - 1;
         right.parent = node.parent;
 
@@ -156,5 +159,17 @@ public class BTree<Key extends Comparable<Key>,Value> implements DuplicateBTree<
     @Override
     public void delete(Key key) throws IllegalKeyException {
         throw new RuntimeException("Not Implemented");
+    }
+
+    public static void main(String[] args) throws bNotEvenException{
+        BTree<Integer, String> tree = new BTree<>(4);
+
+        tree.insert(4, "four");
+        tree.insert(2, "two");
+        tree.insert(10, "ten");
+        tree.insert(8, "eight");
+        tree.insert(5, "five");
+        tree.insert(20, "twenty");
+        tree.insert(15, "fifteen");
     }
 }
