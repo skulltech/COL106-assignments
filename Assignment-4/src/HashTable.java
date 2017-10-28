@@ -30,10 +30,10 @@ public class HashTable {
 
     private void insert(String s, Bucket b) {
         while (b.next != null) {
-            if (b.key.equals(s)) { b = b.next; }
-            else                 { return; }
+            if (b.key.equals(s)) { return;     }
+            else                 { b = b.next; }
         }
-        b.next = new Bucket(s, true);
+        if (!b.key.equals(s)) { b.next = new Bucket(s, true); }
     }
 
     public void insert(String s) {
@@ -52,11 +52,22 @@ public class HashTable {
         if (b != null) {
             while (b.next != null) {
                 if (b.key.equals(s)) { return true; }
+                b = b.next;
             }
-            return false;
+            return b.key.equals(s);
         }
         else { return false; }
     }
 
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        HashTable table = new HashTable(2);
+        table.insert("Sumit");
+        table.insert("Aniket");
+        table.insert("Ghosh");
+        table.insert("Ankit");
+        table.insert("Solanki");
+        table.insert("Maderana");
+        table.insert("Abhishek");
+        System.out.println(table.get("Abhishek"));
+    }
 }
