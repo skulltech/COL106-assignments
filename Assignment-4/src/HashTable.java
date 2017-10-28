@@ -38,12 +38,24 @@ public class HashTable {
 
     public void insert(String s) {
         int hash = this.hash(s);
-        Bucket b;
         if (this.table[hash] != null) {
             this.collisions++;
             this.insert(s, this.table[hash]);
         }
         else { this.table[hash] = new Bucket(s, true); }
+    }
+
+    public Boolean get(String s) {
+        int hash = this.hash(s);
+        Bucket b = this.table[hash];
+
+        if (b != null) {
+            while (b.next != null) {
+                if (b.key.equals(s)) { return true; }
+            }
+            return false;
+        }
+        else { return false; }
     }
 
     public static void main(String[] args) {}
