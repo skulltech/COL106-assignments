@@ -1,13 +1,14 @@
 public class HashTable {
-    private bucket[] table;
+    private Bucket[] table;
     private int size;
+    public int collisions = 0;
 
-    private class bucket {
+    private class Bucket {
         String key;
         Boolean val;
-        bucket next;
+        Bucket next;
 
-        public bucket(String key, Boolean val) {
+        private Bucket(String key, Boolean val) {
             this.key = key;
             this.val = val;
         }
@@ -24,14 +25,26 @@ public class HashTable {
     public HashTable(int size) {
         float loadFactor = 0.75f;
         this.size = (int) ((float)size/loadFactor);
-        this.table = new bucket[this.size];
+        this.table = new Bucket[this.size];
+    }
+
+    private void insert(String s, Bucket b) {
+        while (b.next != null) {
+            if (b.key.equals(s)) { b = b.next; }
+            else                 { return; }
+        }
+        b.next = new Bucket(s, true);
     }
 
     public void insert(String s) {
-
+        int hash = this.hash(s);
+        Bucket b;
+        if (this.table[hash] != null) {
+            this.collisions++;
+            this.insert(s, this.table[hash]);
+        }
+        else { this.table[hash] = new Bucket(s, true); }
     }
 
-    public static void main(String[] args) {
-        System.out.println(hash("Sumit Ghosh", 50000));
-    }
+    public static void main(String[] args) {}
 }
