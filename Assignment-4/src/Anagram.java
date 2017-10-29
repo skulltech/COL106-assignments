@@ -11,10 +11,24 @@ public class Anagram {
     }
 
     private ArrayList<String> anagrams(String s) {
-        return null;
+        return table.get(s);
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Anagram anagram = new Anagram("C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-4\\src\\vocabulary.txt");
+        String vocabulary = args[0];
+        String input = args[1];
+
+        File file = new File(input);
+        Scanner inp = new Scanner(file);
+        int len = inp.nextInt();
+        inp.nextLine();
+
+        Anagram anagram = new Anagram(vocabulary);
+
+        for (int i=0; i<len; i++) {
+            ArrayList<String> anagrams = anagram.anagrams(inp.nextLine());
+            for (String word: anagrams) { System.out.println(word); }
+            System.out.println(-1);
+        }
     }
 }
