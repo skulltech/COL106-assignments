@@ -1,19 +1,15 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class HashTable {
-    private Bucket[] table;
+    private ArrayList<Bucket>[] table;
     private int size;
     public int collisions = 0;
 
     private class Bucket {
-        String key;
-        Boolean val;
-        Bucket next;
-
-        private Bucket(String key, Boolean val) {
-            this.key = key;
-            this.val = val;
-        }
+        private String key;
+        private ArrayList<String> values;
     }
 
     private int hash(String s) {
@@ -27,41 +23,29 @@ public class HashTable {
     public HashTable(int size) {
         float loadFactor = 0.75f;
         this.size = (int) ((float)size/loadFactor);
-        this.table = new Bucket[this.size];
-    }
-
-    private void insert(String s, Bucket b) {
-        while (b.next != null) {
-            if (b.key.equals(s)) { return;     }
-            else                 { b = b.next; }
-        }
-        if (!b.key.equals(s)) { b.next = new Bucket(s, true); }
+        table = new ArrayList[this.size];
     }
 
     public void insert(String s) {
+        s = sort(s);
         int hash = this.hash(s);
-        if (this.table[hash] != null) {
-            this.collisions++;
-            this.insert(s, this.table[hash]);
-        }
-        else { this.table[hash] = new Bucket(s, true); }
-    }
 
-    public Boolean get(String s) {
-        int hash = this.hash(s);
-        Bucket b = this.table[hash];
+        if (this.table[hash] != null) { this.table[hash] = new ArrayList<>(); }
+        for (Bucket b: this.table[hash]) {
+            if (b.key.equals(s)) {
 
-        if (b != null) {
-            while (b.next != null) {
-                if (b.key.equals(s)) { return true; }
-                b = b.next;
             }
-            return b.key.equals(s);
         }
-        else { return false; }
+
+        this.table[hash].add(s);
     }
 
-    private String sort(String original){
+    public ArrayList<String> get(String s) {
+        int hash = this.hash(s);
+        return this.table[hash];
+    }
+
+    private static String sort(String original){
         char[] chars = original.toCharArray();
         Arrays.sort(chars);
         return new String(chars);
@@ -77,5 +61,7 @@ public class HashTable {
         table.insert("Maderana");
         table.insert("Abhishek");
         System.out.println(table.get("Abhishek"));
+
+        System.out.println(sort("sum1ti ouu"));
     }
 }
