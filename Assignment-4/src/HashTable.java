@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class HashTable {
     private Bucket[] table;
     private int size;
@@ -57,6 +59,12 @@ public class HashTable {
             return b.key.equals(s);
         }
         else { return false; }
+    }
+
+    private String sort(String original){
+        char[] chars = original.toCharArray();
+        Arrays.sort(chars);
+        return new String(chars);
     }
 
     public static void main(String[] args) {
