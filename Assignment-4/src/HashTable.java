@@ -1,5 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class HashTable {
@@ -9,7 +12,12 @@ public class HashTable {
 
     private class Bucket {
         private String key;
-        private ArrayList<String> values;
+        private ArrayList<String> values = new ArrayList<>();
+
+        public Bucket(String key, String val) {
+            this.key = key;
+            values.add(val);
+        }
     }
 
     private int hash(String s) {
@@ -27,22 +35,26 @@ public class HashTable {
     }
 
     public void insert(String s) {
-        s = sort(s);
-        int hash = this.hash(s);
+        String sorted = sort(s);
+        int hash = this.hash(sorted);
 
-        if (this.table[hash] != null) { this.table[hash] = new ArrayList<>(); }
+        if (this.table[hash] == null) { this.table[hash] = new ArrayList<>(); }
         for (Bucket b: this.table[hash]) {
-            if (b.key.equals(s)) {
-
-            }
+            if (b.key.equals(sorted) && !b.values.get(b.values.size()-1).equals(s)) { b.values.add(s); }
         }
-
-        this.table[hash].add(s);
+        this.table[hash].add(new Bucket(sorted, s));
+        this.collisions++;
     }
 
     public ArrayList<String> get(String s) {
-        int hash = this.hash(s);
-        return this.table[hash];
+        String sorted = sort(s);
+        int hash = this.hash(sorted);
+        if (this.table[hash] == null) {return new ArrayList<String>(); }
+
+        for (Bucket b: this.table[hash]) {
+            if (b.key.equals(sorted)) { return b.values; }
+        }
+        return new ArrayList<String>();
     }
 
     private static String sort(String original){
@@ -51,17 +63,19 @@ public class HashTable {
         return new String(chars);
     }
 
-    public static void main(String[] args) {
-        HashTable table = new HashTable(2);
-        table.insert("Sumit");
-        table.insert("Aniket");
-        table.insert("Ghosh");
-        table.insert("Ankit");
-        table.insert("Solanki");
-        table.insert("Maderana");
-        table.insert("Abhishek");
-        System.out.println(table.get("Abhishek"));
+    public static void main(String[] args) throws FileNotFoundException{
+        String filePath = "C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-4\\src\\vocabulary.txt";
+        File file = new File(filePath);
+        Scanner s = new Scanner(file);
 
-        System.out.println(sort("sum1ti ouu"));
+        int size = s.nextInt();
+        s.nextLine();
+        HashTable table = new HashTable(size);
+
+        for (int i=0; i<size; i++) {
+            String word = s.nextLine();
+            table.insert(word);
+        }
+        System.out.println(table.get("amy"));
     }
 }
