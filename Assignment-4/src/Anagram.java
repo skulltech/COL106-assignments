@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Anagram {
     private HashTable table;
@@ -27,6 +26,7 @@ public class Anagram {
 
         for (int i=0; i<len; i++) {
             ArrayList<String> anagrams = anagram.anagrams(inp.nextLine());
+            Collections.sort(anagrams);
             for (String word: anagrams) { System.out.println(word); }
             System.out.println(-1);
         }
