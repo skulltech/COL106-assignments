@@ -57,7 +57,7 @@ public class HashTable {
 
         if (this.table[hash] == null) { this.table[hash] = new ArrayList<>(); }
         for (Bucket b: this.table[hash]) {
-            if (b.key.equals(sorted) && !b.values.get(b.values.size()-1).equals(s)) { b.values.add(s); }
+            if (b.key.equals(sorted) && !b.values.contains(s)) { b.values.add(s); }
         }
         this.table[hash].add(new Bucket(sorted, s));
         this.collisions++;
