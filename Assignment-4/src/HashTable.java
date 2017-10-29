@@ -34,6 +34,23 @@ public class HashTable {
         table = new ArrayList[this.size];
     }
 
+    public HashTable(String filename) throws FileNotFoundException{
+        File file = new File(filename);
+        Scanner s = new Scanner(file);
+
+        int vocabularySize = s.nextInt();
+        s.nextLine();
+
+        float loadFactor = 0.75f;
+        this.size = (int) ((float)vocabularySize/loadFactor);
+        table = new ArrayList[this.size];
+
+        for (int i=0; i<vocabularySize; i++) {
+            String word = s.nextLine();
+            this.insert(word);
+        }
+    }
+
     public void insert(String s) {
         String sorted = sort(s);
         int hash = this.hash(sorted);
@@ -65,17 +82,7 @@ public class HashTable {
 
     public static void main(String[] args) throws FileNotFoundException{
         String filePath = "C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-4\\src\\vocabulary.txt";
-        File file = new File(filePath);
-        Scanner s = new Scanner(file);
-
-        int size = s.nextInt();
-        s.nextLine();
-        HashTable table = new HashTable(size);
-
-        for (int i=0; i<size; i++) {
-            String word = s.nextLine();
-            table.insert(word);
-        }
+        HashTable table = new HashTable(filePath);
         System.out.println(table.get("amy"));
     }
 }
