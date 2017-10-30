@@ -57,10 +57,15 @@ public class HashTable {
 
         if (this.table[hash] == null) { this.table[hash] = new ArrayList<>(); }
         for (Bucket b: this.table[hash]) {
-            if (b.key.equals(sorted) && !b.values.contains(s)) { b.values.add(s); }
+            if (b.key.equals(sorted)) {
+                if  (!b.values.contains(s)) {
+                    b.values.add(s);
+                    return;
+                }
+                else { this.collisions++; }
+            }
         }
         this.table[hash].add(new Bucket(sorted, s));
-        this.collisions++;
     }
 
     public ArrayList<String> get(String s) {
@@ -84,5 +89,6 @@ public class HashTable {
         String filePath = "C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-4\\src\\vocabulary.txt";
         HashTable table = new HashTable(filePath);
         System.out.println(table.get("amy"));
+        System.out.println(table.collisions);
     }
 }
