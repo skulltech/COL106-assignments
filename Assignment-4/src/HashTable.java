@@ -34,7 +34,7 @@ public class HashTable {
         table = new ArrayList[this.size];
     }
 
-    public HashTable(String filename) throws FileNotFoundException{
+    public HashTable(String filename) throws FileNotFoundException {
         File file = new File(filename);
         Scanner s = new Scanner(file);
 
@@ -79,13 +79,13 @@ public class HashTable {
         return new ArrayList<String>();
     }
 
-    private static String sort(String original){
+    private static String sort(String original) {
         char[] chars = original.toCharArray();
         Arrays.sort(chars);
         return new String(chars);
     }
 
-    public static void main(String[] args) throws FileNotFoundException{
+    public static void main(String[] args) throws FileNotFoundException {
         String filePath = "C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-4\\src\\vocabulary.txt";
         HashTable table = new HashTable(filePath);
         System.out.println(table.get("amy"));

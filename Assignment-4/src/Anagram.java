@@ -5,12 +5,30 @@ import java.util.*;
 public class Anagram {
     private HashTable table;
 
-    public Anagram(String filename) throws FileNotFoundException{
+    public Anagram(String filename) throws FileNotFoundException {
         table = new HashTable(filename);
     }
 
     private ArrayList<String> anagrams(String s) {
         return table.get(s);
+    }
+
+    private static ArrayList<String> combinations(String s, int length) {
+        ArrayList<String> combinations = new ArrayList<>();
+        combinations(s, "", combinations, length, 0);
+        return combinations;
+    }
+
+    private static void combinations(String s, String prefix, ArrayList<String> combinations, int length, int depth) {
+        if (prefix.length() >= length) {
+            combinations.add(prefix);
+            return;
+        }
+        if (depth >= s.length()) { return; }
+
+        combinations(s, prefix, combinations, length, depth+1);
+        prefix = prefix + s.charAt(depth);
+        combinations(s, prefix, combinations, length, depth+1);
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -30,5 +48,8 @@ public class Anagram {
             for (String word: anagrams) { System.out.println(word); }
             System.out.println(-1);
         }
+
+        ArrayList<String> combinations = combinations("sumitghosh", 4);
+        System.out.println(combinations.size());
     }
 }
