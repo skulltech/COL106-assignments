@@ -13,9 +13,19 @@ public class Anagram {
         return table.get(s);
     }
 
+    private static String sort(String original) {
+        char[] chars = original.toCharArray();
+        Arrays.sort(chars);
+        return new String(chars);
+    }
+
     private static ArrayList<String> combinations(String s, int length) {
         ArrayList<String> combinations = new ArrayList<>();
         combinations(s, "", combinations, length, 0);
+        HashSet<String> combs = new HashSet<>();
+        for (String c: combinations) { combs.add(sort(c)); }
+        combinations.clear();
+        combinations.addAll(combs);
         return combinations;
     }
 
@@ -29,19 +39,23 @@ public class Anagram {
         return sb.toString();
     }
 
-    private void combinations(String s) {
+    private ArrayList<String> split(String s, Boolean stop) {
+        ArrayList<String> collect = new ArrayList<>();
 
         for (int i=3; i<s.length()-2; i++) {
-            ArrayList<String> combinations = new ArrayList<>();
-            combinations = combinations(s, i);
+            ArrayList<String> combinations = combinations(s, i);
 
             for (String comb: combinations) {
                 ArrayList<String> anagrams = table.get(comb);
-                if (anagrams.size() > 0) {
-
+                String remain = exclude(s, comb);
+                for (String ana: anagrams) {
+                    for (String rem: table.get(remain)) {
+                        collect.add(ana + ' ' + rem);
+                    }
                 }
             }
         }
+        return collect;
     }
 
     private static void combinations(String s, String prefix, ArrayList<String> combinations, int length, int depth) {
@@ -74,7 +88,7 @@ public class Anagram {
             System.out.println(-1);
         }
 
-        ArrayList<String> combinations = combinations("sumitghosh", 4);
-        System.out.println(combinations.size());
+        ArrayList<String> collect = new ArrayList<>();
+        System.out.println(anagram.split("sumitghosh", true));
     }
 }
