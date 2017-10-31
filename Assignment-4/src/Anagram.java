@@ -19,6 +19,31 @@ public class Anagram {
         return combinations;
     }
 
+    private static String exclude(String original, String exclude) {
+        StringBuilder sb = new StringBuilder(original);
+        for (int i=0; i<exclude.length(); i++) {
+            int index = sb.toString().indexOf(exclude.charAt(i));
+            if (index > -1) { sb.deleteCharAt(index); }
+        }
+
+        return sb.toString();
+    }
+
+    private void combinations(String s) {
+
+        for (int i=3; i<s.length()-2; i++) {
+            ArrayList<String> combinations = new ArrayList<>();
+            combinations = combinations(s, i);
+
+            for (String comb: combinations) {
+                ArrayList<String> anagrams = table.get(comb);
+                if (anagrams.size() > 0) {
+
+                }
+            }
+        }
+    }
+
     private static void combinations(String s, String prefix, ArrayList<String> combinations, int length, int depth) {
         if (prefix.length() >= length) {
             combinations.add(prefix);
