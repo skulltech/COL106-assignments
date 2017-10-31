@@ -10,7 +10,12 @@ public class Anagram {
     }
 
     private ArrayList<String> anagrams(String s) {
-        return table.get(s);
+        ArrayList<String> ret = new ArrayList<>();
+        ret.addAll(split(s, 1));
+        ret.addAll(split(s, 2));
+        ret.addAll(split(s, 3));
+
+        return ret;
     }
 
     private static String sort(String original) {
@@ -48,14 +53,32 @@ public class Anagram {
             for (String comb: combinations) {
                 ArrayList<String> anagrams = table.get(comb);
                 String remain = exclude(s, comb);
-                for (String ana: anagrams) {
-                    for (String rem: table.get(remain)) {
-                        collect.add(ana + ' ' + rem);
+
+                if (stop) {
+                    for (String ana: anagrams) {
+                        for (String rem : table.get(remain)) {
+                            collect.add(ana + ' ' + rem);
+                        }
                     }
                 }
+                else {
+                    ArrayList<String> remSplit = split(remain, true);
+                    for (String ana: anagrams) {
+                        for (String rem: remSplit) {
+                            collect.add(ana + ' '+ rem);
+                        }
+                    }
+                }
+                }
             }
-        }
+
         return collect;
+    }
+
+    private ArrayList<String> split(String s, int parts) {
+        if      (parts < 2) { return         table.get(s); }
+        else if (parts < 3) { return split(s,  true); }
+        else                { return split(s, false); }
     }
 
     private static void combinations(String s, String prefix, ArrayList<String> combinations, int length, int depth) {
@@ -85,10 +108,8 @@ public class Anagram {
             ArrayList<String> anagrams = anagram.anagrams(inp.nextLine());
             Collections.sort(anagrams);
             for (String word: anagrams) { System.out.println(word); }
+            System.out.println(anagrams.size());
             System.out.println(-1);
         }
-
-        ArrayList<String> collect = new ArrayList<>();
-        System.out.println(anagram.split("sumitghosh", true));
     }
 }
