@@ -23,6 +23,35 @@ public class Board {
         this.isGoal = ifGoal();
     }
 
+    private static int[][] parse(String state) {
+        int blocks[][] = new int[3][3];
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                char c = state.charAt(i * 3 + j);
+                int number;
+
+                if (c != 'G') {
+                    number = Character.getNumericValue(c);
+                } else {
+                    number = 0;
+                }
+                blocks[i][j] = number;
+            }
+        }
+
+        return blocks;
+    }
+
+    public Board(String state) {
+        for (int i=0; i<3; i++) {
+            for (int j=0; j<3; j++) {
+                int number =
+                this.blocks[i][j] =
+            }
+        }
+    }
+
     public int dimension() { return N; }
 
     public int manhattan() { return this.manhattan; }
