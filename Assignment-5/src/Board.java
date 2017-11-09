@@ -1,25 +1,14 @@
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.Stack;
-import edu.princeton.cs.algs4.StdOut;
-
 import java.util.Iterator;
 
 
 public class Board {
 
     private final int[][] blocks;
-    private final int N;
-    private int hamming;
-    private int manhattan;
     private boolean isGoal;
 
 
     public Board(int[][] blocks) {
         this.blocks = blocks;
-        this.N = blocks.length;
-
-        calculateHamming();;
-        calculateManhattan();
         this.isGoal = ifGoal();
     }
 
@@ -44,41 +33,11 @@ public class Board {
     }
 
     public Board(String state) {
-        for (int i=0; i<3; i++) {
-            for (int j=0; j<3; j++) {
-                int number =
-                this.blocks[i][j] =
-            }
-        }
+        this.blocks = parse(state);
+        this.isGoal = ifGoal();
     }
 
     public int dimension() { return N; }
-
-    public int manhattan() { return this.manhattan; }
-
-    public int hamming() { return this.hamming; }
-
-    private void calculateHamming() {
-        int count = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int val = this.blocks[i][j];
-                if (val != (i*N + j + 1) && val != 0) count++;
-            }
-        }
-        hamming = count;
-    }
-
-    private void calculateManhattan() {
-        int dist = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int val = blocks[i][j];
-                if (val != 0) dist = dist + mod(((val-1)/N) - i) + mod(((val-1)%N) - j);
-            }
-        }
-        manhattan = dist;
-    }
 
     private int mod(int v) {
         if (v > 0) return +v;
