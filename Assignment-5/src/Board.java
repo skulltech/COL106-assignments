@@ -2,13 +2,14 @@ import java.util.Iterator;
 
 
 public class Board {
-
     private final int[][] blocks;
+    private final int[][] goal;
     private boolean isGoal;
 
 
-    public Board(int[][] blocks) {
+    public Board(int[][] blocks, int[][] goal) {
         this.blocks = blocks;
+        this.goal = goal;
         this.isGoal = ifGoal();
     }
 
@@ -32,12 +33,7 @@ public class Board {
         return blocks;
     }
 
-    public Board(String state) {
-        this.blocks = parse(state);
-        this.isGoal = ifGoal();
-    }
-
-    public int dimension() { return N; }
+    public Board(String state, String goal) { this(parse(state), parse(goal)); }
 
     private int mod(int v) {
         if (v > 0) return +v;
