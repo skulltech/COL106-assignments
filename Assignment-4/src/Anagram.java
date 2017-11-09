@@ -94,6 +94,8 @@ public class Anagram {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
+//        long startTime = System.currentTimeMillis();
+
         String vocabulary = args[0];
         String input = args[1];
 
@@ -108,8 +110,11 @@ public class Anagram {
             ArrayList<String> anagrams = anagram.anagrams(inp.nextLine());
             Collections.sort(anagrams);
             for (String word: anagrams) { System.out.println(word); }
-            System.out.println(anagrams.size());
+//            System.out.println(anagrams.size());
             System.out.println(-1);
         }
+/*        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println(totalTime);*/
     }
 }
