@@ -4,7 +4,7 @@ import java.util.Stack;
 
 public class Board {
     private final int[][] blocks;
-    private final String state;
+    public final String state;
     public final int dimension;
 
     public Board(String state) {

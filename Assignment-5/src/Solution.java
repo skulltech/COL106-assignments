@@ -3,6 +3,18 @@ public class Solution {
     private Board goal;
     private int[] cost;
 
+    private class Vertex {
+        public Board board;
+        public double distance;
+        public Vertex prev;
+
+        public Vertex(Board board) {
+            this.board = board;
+            distance = Double.POSITIVE_INFINITY;
+            prev = null;
+        }
+    }
+
     private Solution(String initial, String goal, String cost) {
         this.initial = new Board(initial);
         this.goal = new Board(goal);
