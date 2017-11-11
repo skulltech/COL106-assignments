@@ -1,16 +1,22 @@
 import java.util.Iterator;
+import java.util.Stack;
 
 
 public class Board {
     private final int[][] blocks;
-    private final int[][] goal;
-    private boolean isGoal;
+    private final String state;
+    public final int dimension;
 
+    public Board(String state) {
+        this.blocks = parse(state);
+        this.dimension = this.blocks.length;
+        this.state = state;
+    }
 
-    public Board(int[][] blocks, int[][] goal) {
+    public Board(int[][] blocks) {
         this.blocks = blocks;
-        this.goal = goal;
-        this.isGoal = ifGoal();
+        this.dimension = this.blocks.length;
+        this.state = parse(blocks);
     }
 
     private static int[][] parse(String state) {
@@ -33,52 +39,25 @@ public class Board {
         return blocks;
     }
 
-    public Board(String state, String goal) { this(parse(state), parse(goal)); }
+    private static String parse(int[][] blocks) {
+        StringBuilder sb = new StringBuilder(blocks.length * blocks.length);
 
-    private int mod(int v) {
-        if (v > 0) return +v;
-        else       return -v;
-    }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int number = blocks[i][j];
+                char c;
 
-    private boolean ifGoal() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (this.blocks[i][j] != ((i*N + j + 1) % (N*N))) return false;
-            }
-        }
-        return true;
-    }
 
-    public boolean isGoal() { return this.isGoal; }
-
-    public Board twin() { return new Board(exchrnd(blocks, N)); }
-
-    private static int[][] exchrnd(int[][] input, int N) {
-        int fi = 0, fj = 0;
-        loop:
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (input[i][j] != 0) {
-                    fi = i;
-                    fj = j;
-                    break loop;
+                if (number != 0) {
+                    c = Character.forDigit(number, 10);
+                } else {
+                    c = 'G';
                 }
+                sb.append(c);
             }
         }
 
-        int si = N-1, sj = N-1;
-        loop:
-        for (int i = N-1; i >= 0; i--) {
-            for (int j = N-1; j >= 0; j--) {
-                if (input[i][j] != 0 && i != fi && j != fj) {
-                    si = i;
-                    sj = j;
-                    break loop;
-                }
-            }
-        }
-
-        return exch(input, fi, fj, si, sj);
+        return sb.toString();
     }
 
     private static int[][] exch(int[][] input, int fi, int fj, int si, int sj) {
@@ -108,7 +87,8 @@ public class Board {
         try                          { cmp = (Board) that; }
         catch (ClassCastException e) { return false;       }
 
-        if (cmp.dimension() != this.dimension()) return false;
+        if (cmp.dimension != this.dimension) return false;
+        int N = this.dimension;
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j< N; j++) {
@@ -131,6 +111,7 @@ public class Board {
 
         private void getNeighbors() {
             int bi = 0, bj = 0;
+            int N = Board.this.dimension;
 
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
@@ -161,14 +142,8 @@ public class Board {
     }
 
     public String toString() {
+        int digits = 1, N = this.dimension;
         String rep = Integer.toString(N) + System.lineSeparator();
-        int digits = 1, n = N;
-        /*
-        while (n > 9) {
-            digits++;
-            n = n / 10;
-        }
-        */
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -180,21 +155,6 @@ public class Board {
         return rep;
     }
 
-    public static void main(String[] args) {
-
-        // create initial board from file
-        In in = new In(args[0]);
-        int n = in.readInt();
-        int[][] blocks = new int[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                blocks[i][j] = in.readInt();
-        Board initial = new Board(blocks);
-        initial = new Board(new int[][] {{0, 1}, {2, 3}});
-        StdOut.println(initial.twin());
-        /*for (Board b: initial.neighbors()) {
-            StdOut.println(b);
-        }*/
-    }
+    public static void main(String[] args) {}
 
 }
