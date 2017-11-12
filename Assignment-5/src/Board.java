@@ -142,6 +142,10 @@ public class Board {
     }
 
     public String toString() {
+        return this.state;
+    }
+
+    public String toStringFormatted() {
         int digits = 1, N = this.dimension;
         String rep = Integer.toString(N) + System.lineSeparator();
 
@@ -156,5 +160,4 @@ public class Board {
     }
 
     public static void main(String[] args) {}
-
 }

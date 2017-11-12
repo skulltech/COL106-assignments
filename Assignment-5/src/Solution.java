@@ -65,7 +65,13 @@ public class Solution {
         }
     }
 
-    private int minDistance(Board b) {
-        return (int) cloud.get(b).distance;
+    private int solution() {
+        return (int) cloud.get(this.goal).distance;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution("12346875G", "12345678G", "12345678");
+        sol.solve();
+        System.out.println(sol.solution());
     }
 }
