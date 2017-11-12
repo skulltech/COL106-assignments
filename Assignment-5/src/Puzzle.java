@@ -102,27 +102,36 @@ public class Puzzle {
                 if (g.indexOf(s.get(j)) < g.indexOf(s.get(i))) { inversion++; }
             }
         }
-        System.out.println(inversion);
-
         return ((inversion%2)==0);
     }
 
-    public void solve(String initial, String cost, String goal) {
+    public Solution solve(String initial, String cost, String goal) {
+        if (!isSolvable(initial, goal)) { return new Solution(false); }
 
         this.initial = new Board(initial);
         this.parseCost(cost);
         this.cleanup();
-
         this.dijkstra();
+        return new Solution(goal);
     }
 
-    public Solution solution(String goal) { return new Solution(goal); }
+    public Solution solution(String goal) {
+        if (!isSolvable(this.initial.state, goal)) { return new Solution(false); }
+        return new Solution(goal);
+    }
 
     private class Solution {
         public int cost;
         public int steps;
         public ArrayList<Board> path;
         private Vertex fv;
+
+        public Solution(Boolean reachable) {
+            if (!reachable) {
+                this.cost = -1;
+                this.steps = -1;
+            }
+        }
 
         public Solution(String goal) {
             this.fv = cloud.get(new Board(goal));
@@ -154,8 +163,7 @@ public class Puzzle {
         System.out.println(sol.steps);
         System.out.println(sol.cost);
 
-        p.solve("12346875G", "12345678");
-        sol = p.solution("12345678G");
+        sol = p.solve("12346857G", "12345678", "12345678G");
         System.out.println(sol.steps);
         System.out.println(sol.cost);
 
