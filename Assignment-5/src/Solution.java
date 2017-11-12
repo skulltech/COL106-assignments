@@ -3,9 +3,8 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 
-public class Solution {
+public class Puzzle {
     private Board initial;
-    private Board goal;
     private int[] cost;
     private HashMap<Board, Vertex> cloud = new HashMap<>();
     private PriorityQueue<Vertex> queue = new PriorityQueue<>();
@@ -30,9 +29,8 @@ public class Solution {
         return cost;
     }
 
-    private Solution(String initial, String goal, String cost) {
+    private Puzzle(String initial, String cost) {
         this.initial = new Board(initial);
-        this.goal = new Board(goal);
 
         int N = initial.length() - 1;
         this.cost = new int[N];
@@ -41,9 +39,11 @@ public class Solution {
             char c = cost.charAt(i);
             this.cost[i] = Character.getNumericValue(c);
         }
+
+        this.solve();
     }
 
-    public void solve() {
+    private void solve() {
         Vertex s = new Vertex(initial);
         s.distance = 0;
         cloud.put(initial, s);
@@ -72,25 +72,43 @@ public class Solution {
         }
     }
 
-    private int solution() {
-        return (int) cloud.get(this.goal).distance;
-    }
+    private class Solution {
+        public int cost;
+        public int steps;
+        public ArrayList<Board> path;
+        private Vertex fv;
 
-    private ArrayList<Board> path() {
-        ArrayList<Board> path = new ArrayList<>();
-        Vertex goal = cloud.get(this.goal);
-        path.add(0, this.goal);
-
-        while (goal.prev != null) {
-            goal = goal.prev;
-            path.add(0, goal.board);
+        public Solution(String goal) {
+            this.fv = cloud.get(new Board(goal));
+            this.cost = (int) this.fv.distance;
+            this.backtrace();
         }
 
-        return path;
+        private void backtrace() {
+            ArrayList<Board> path = new ArrayList<>();
+            int count = 0;
+            path.add(0, this.fv.board);
+
+            while (this.fv.prev != null) {
+                fv = fv.prev;
+                count++;
+                path.add(0, fv.board);
+            }
+
+            this.steps = count;
+            this.path = path;
+        }
     }
 
+    private int distance(String goal) {
+        Board fb = new Board(goal);
+        return (int) cloud.get(fb).distance;
+    }
+
+
+
     public static void main(String[] args) {
-        Solution sol = new Solution("12346875G", "12345678G", "12345678");
+        Solution sol = new Solution("12346875G", "12345678");
         sol.solve();
         System.out.println(sol.solution());
 
