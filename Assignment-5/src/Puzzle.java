@@ -1,7 +1,9 @@
-import java.net.Inet4Address;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 
 public class Puzzle {
@@ -190,14 +192,30 @@ public class Puzzle {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Puzzle p = new Puzzle();
+        File file = new File("C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-5\\src\\input.txt");
+        Scanner sc = new Scanner(file);
+        int N = Integer.parseInt(sc.nextLine());
+        String initial, goal, cost, pi, pc;
 
-        p.solve("12346875G", "12345678");
-        Solution sol = p.solution("12345678G");
-        System.out.println(sol);
+        initial = sc.next();
+        goal = sc.next();
+        sc.nextLine();
+        cost = sc.nextLine().replaceAll("\\s", "");
+        System.out.println(p.solve(initial, cost, goal));
+        pi = initial;
+        pc = cost;
 
-        sol = p.solve("12346857G", "12345678", "12345678G");
-        System.out.println(sol);
+
+        for (int i=0; i<N-1; i++) {
+            initial = sc.next();
+            goal = sc.next();
+            sc.nextLine();
+            cost = sc.nextLine().replaceAll("\\s", "");
+
+            if (initial.equals(pi) && cost.equals(pc)) { System.out.println(p.solution(goal));             }
+            else                                       { System.out.println(p.solve(initial, cost, goal)); }
+        }
     }
 }
