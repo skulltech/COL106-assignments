@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -22,7 +23,11 @@ public class Solution {
     }
 
     private int edge(Board first, Board second) {
-        return this.cost[Character.getNumericValue(first.state.charAt(second.state.indexOf('G')))];
+        int cost;
+        try { cost = this.cost[Character.getNumericValue(first.state.charAt(second.state.indexOf('G'))) - 1]; }
+        catch (ArrayIndexOutOfBoundsException e) { cost = 0; }
+
+        return cost;
     }
 
     private Solution(String initial, String goal, String cost) {
@@ -56,7 +61,7 @@ public class Solution {
             for (Board n: v.board.neighbors()) {
                 Vertex nv = cloud.get(n);
                 if (!nv.known) {
-                    Double dist = nv.distance + edge(v.board, n);
+                    Double dist = v.distance + edge(v.board, n);
                     if (Double.compare(dist, nv.distance) < 0) {
                         nv.distance = dist;
                         nv.prev = v;
@@ -71,9 +76,28 @@ public class Solution {
         return (int) cloud.get(this.goal).distance;
     }
 
+    private ArrayList<Board> path() {
+        ArrayList<Board> path = new ArrayList<>();
+        Vertex goal = cloud.get(this.goal);
+        path.add(0, this.goal);
+
+        while (goal.prev != null) {
+            goal = goal.prev;
+            path.add(0, goal.board);
+        }
+
+        return path;
+    }
+
     public static void main(String[] args) {
         Solution sol = new Solution("12346875G", "12345678G", "12345678");
         sol.solve();
         System.out.println(sol.solution());
+
+        ArrayList<Board> path = sol.path();
+        for (int i=0; i<path.size(); i++) {
+            System.out.println(path.get(i).toStringFormatted());
+            if (i != path.size()-1) { System.out.println(sol.edge(path.get(i), path.get(i+1))); }
+        }
     }
 }

@@ -150,7 +150,7 @@ public class Board {
 
     public String toStringFormatted() {
         int digits = 1, N = this.dimension;
-        String rep = Integer.toString(N) + System.lineSeparator();
+        String rep = System.lineSeparator();
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
