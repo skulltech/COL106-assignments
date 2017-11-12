@@ -1,3 +1,4 @@
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -120,13 +121,33 @@ public class Puzzle {
         return new Solution(goal);
     }
 
+    private static String move(Board first, Board second) {
+        int N = first.dimension;
+        String ret = String.valueOf(first.state.charAt(second.state.indexOf('G')));
+        int i = second.state.indexOf('G');
+        int f = first.state.indexOf('G');
+        int xi = i%N;
+        int yi = i/N;
+        int xf = f%N;
+        int yf = f/N;
+
+        if      (xf > xi) { ret = ret + 'R'; }
+        else if (xf < xi) { ret = ret + 'L'; }
+        else if (yf > yi) { ret = ret + 'D'; }
+        else if (yf < yi) { ret = ret + 'U'; }
+
+        return ret;
+    }
+
     private class Solution {
         public int cost;
         public int steps;
         public ArrayList<Board> path;
         private Vertex fv;
+        private Boolean reachable = true;
 
         public Solution(Boolean reachable) {
+            this.reachable = reachable;
             if (!reachable) {
                 this.cost = -1;
                 this.steps = -1;
@@ -153,24 +174,30 @@ public class Puzzle {
             this.steps = count;
             this.path = path;
         }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(Integer.toString(steps) + " " + Integer.toString(cost) + System.lineSeparator());
+
+            if (reachable) {
+                for (int i=0; i<this.steps; i++) {
+                    sb.append(move(path.get(i), path.get(i+1)));
+                    sb.append(" ");
+                }
+            }
+            return sb.toString();
+        }
     }
 
     public static void main(String[] args) {
         Puzzle p = new Puzzle();
 
-        p.solve("1274G3865", "12345678");
+        p.solve("12346875G", "12345678");
         Solution sol = p.solution("12345678G");
-        System.out.println(sol.steps);
-        System.out.println(sol.cost);
+        System.out.println(sol);
 
         sol = p.solve("12346857G", "12345678", "12345678G");
-        System.out.println(sol.steps);
-        System.out.println(sol.cost);
-
-
-        /*ArrayList<Board> path = sol.path;
-        for (int i=0; i<path.size(); i++) {
-            System.out.println(path.get(i).toStringFormatted());
-        }*/
+        System.out.println(sol);
     }
 }
