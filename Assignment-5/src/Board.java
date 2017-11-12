@@ -77,7 +77,14 @@ public class Board {
         return output;
     }
 
-    public boolean equals(Board cmp) {
+    @Override
+    public boolean equals(Object that) {
+        if (that == null) return false;
+
+        Board cmp;
+        try                          { cmp = (Board) that; }
+        catch (ClassCastException e) { return false;       }
+
         if (cmp.dimension != this.dimension) return false;
         int N = this.dimension;
 
@@ -86,8 +93,15 @@ public class Board {
                 if (this.blocks[i][j] != cmp.blocks[i][j]) return false;
             }
         }
+        for (int i = 0; i < N*N; i++) {
+            if (this.state.charAt(i) != cmp.state.charAt(i)) { return false; }
+        }
+
         return true;
     }
+
+    @Override
+    public int hashCode() { return this.state.hashCode(); }
 
     public Iterable<Board> neighbors() { return new Neighbors(this.blocks); }
 
@@ -129,6 +143,7 @@ public class Board {
         }
     }
 
+    @Override
     public String toString() {
         return this.state;
     }

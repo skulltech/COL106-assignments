@@ -41,6 +41,7 @@ public class Solution {
     public void solve() {
         Vertex s = new Vertex(initial);
         s.distance = 0;
+        cloud.put(initial, s);
         queue.add(s);
         Vertex v;
 
@@ -60,6 +61,7 @@ public class Solution {
                         nv.distance = dist;
                         nv.prev = v;
                     }
+                    queue.add(nv);
                 }
             }
         }
