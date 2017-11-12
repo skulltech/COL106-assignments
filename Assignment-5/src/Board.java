@@ -48,11 +48,8 @@ public class Board {
                 char c;
 
 
-                if (number != 0) {
-                    c = Character.forDigit(number, 10);
-                } else {
-                    c = 'G';
-                }
+                if (number != 0) { c = Character.forDigit(number, 10); }
+                else             { c = 'G';                                 }
                 sb.append(c);
             }
         }
@@ -80,13 +77,7 @@ public class Board {
         return output;
     }
 
-    public boolean equals(Object that) {
-        if (that == null) return false;
-
-        Board cmp;
-        try                          { cmp = (Board) that; }
-        catch (ClassCastException e) { return false;       }
-
+    public boolean equals(Board cmp) {
         if (cmp.dimension != this.dimension) return false;
         int N = this.dimension;
 
@@ -133,12 +124,9 @@ public class Board {
 
         private class NeighborsIterator implements Iterator<Board> {
             public boolean hasNext() { return !neighbors.isEmpty(); }
-
             public Board next() { return neighbors.pop(); }
-
             public void remove() { throw new UnsupportedOperationException(); }
         }
-
     }
 
     public String toString() {
@@ -159,5 +147,14 @@ public class Board {
         return rep;
     }
 
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        Board b = new Board("12346G578");
+        System.out.println(b.dimension);
+        System.out.println(b.state);
+        System.out.println(b.toStringFormatted());
+
+        for (Board n: b.neighbors()) {
+            System.out.println(n.toStringFormatted());
+        }
+    }
 }
