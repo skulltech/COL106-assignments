@@ -19,6 +19,12 @@ public class Puzzle {
 
         @Override
         public int compareTo(Vertex that) { return Double.compare(this.distance, that.distance); }
+
+        public void reset() {
+            this.distance = Double.POSITIVE_INFINITY;
+            this.prev = null;
+            this.known = false;
+        }
     }
 
     private int edge(Board first, Board second) {
@@ -29,24 +35,22 @@ public class Puzzle {
         return cost;
     }
 
-    private Puzzle(String initial, String cost) {
-        this.initial = new Board(initial);
-
-        int N = initial.length() - 1;
+    private void parseCost(String cost) {
+        int N = this.initial.state.length() - 1;
         this.cost = new int[N];
 
         for (int i = 0; i < N; i++) {
             char c = cost.charAt(i);
             this.cost[i] = Character.getNumericValue(c);
         }
-
-        this.solve();
     }
 
-    private void solve() {
-        Vertex s = new Vertex(initial);
+    private void cleanup() { for (Board b: this.cloud.keySet()) { this.cloud.get(b).reset(); } }
+
+    private void dijkstra() {
+        Vertex s = new Vertex(this.initial);
         s.distance = 0;
-        cloud.put(initial, s);
+        cloud.put(this.initial, s);
         queue.add(s);
         Vertex v;
 
@@ -70,6 +74,46 @@ public class Puzzle {
                 }
             }
         }
+    }
+
+    public void solve(String initial, String cost) {
+        this.initial = new Board(initial);
+        this.parseCost(cost);
+        this.cleanup();
+        this.dijkstra();
+    }
+
+    private static Boolean isSolvable(String start, String goal) {
+        int N = start.length();
+        ArrayList<Integer> s = new ArrayList<Integer>(), g = new ArrayList<Integer>();
+
+        for (int i=0; i<N; i++) {
+            Character c = start.charAt(i);
+            if (c!='G') { s.add(Character.getNumericValue(c)); }
+        }
+        for (int i=0; i<N; i++) {
+            Character c = goal.charAt(i);
+            if (c!='G') { g.add(Character.getNumericValue(c)); }
+        }
+
+        int inversion = 0;
+        for (int i=0; i<N-1; i++) {
+            for (int j=i+1; j<N-1; j++) {
+                if (g.indexOf(s.get(j)) < g.indexOf(s.get(i))) { inversion++; }
+            }
+        }
+        System.out.println(inversion);
+
+        return ((inversion%2)==0);
+    }
+
+    public void solve(String initial, String cost, String goal) {
+
+        this.initial = new Board(initial);
+        this.parseCost(cost);
+        this.cleanup();
+
+        this.dijkstra();
     }
 
     public Solution solution(String goal) { return new Solution(goal); }
@@ -103,14 +147,22 @@ public class Puzzle {
     }
 
     public static void main(String[] args) {
-        Puzzle p = new Puzzle("12346875G", "12345678");
+        Puzzle p = new Puzzle();
+
+        p.solve("1274G3865", "12345678");
         Solution sol = p.solution("12345678G");
         System.out.println(sol.steps);
         System.out.println(sol.cost);
 
-        ArrayList<Board> path = sol.path;
+        p.solve("12346875G", "12345678");
+        sol = p.solution("12345678G");
+        System.out.println(sol.steps);
+        System.out.println(sol.cost);
+
+
+        /*ArrayList<Board> path = sol.path;
         for (int i=0; i<path.size(); i++) {
             System.out.println(path.get(i).toStringFormatted());
-        }
+        }*/
     }
 }
