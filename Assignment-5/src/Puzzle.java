@@ -15,16 +15,22 @@ public class Puzzle {
     private class Vertex implements Comparable<Vertex>{
         public Board board;
         public double distance = Double.POSITIVE_INFINITY;
+        public int steps = Integer.MAX_VALUE;
         public Vertex prev = null;
         public Boolean known = false;
 
         public Vertex(Board board) { this.board = board; }
 
         @Override
-        public int compareTo(Vertex that) { return Double.compare(this.distance, that.distance); }
+        public int compareTo(Vertex that) {
+            int cmp = Double.compare(this.distance, that.distance);
+            if (cmp!=0) { return cmp; }
+            return Integer.compare(this.steps, that.steps);
+        }
 
         public void reset() {
             this.distance = Double.POSITIVE_INFINITY;
+            this.steps = Integer.MAX_VALUE;
             this.prev = null;
             this.known = false;
         }
@@ -53,6 +59,7 @@ public class Puzzle {
     private void dijkstra() {
         Vertex s = new Vertex(this.initial);
         s.distance = 0;
+        s.steps = 0;
         cloud.put(this.initial, s);
         queue.add(s);
         Vertex v;
@@ -69,9 +76,12 @@ public class Puzzle {
                 Vertex nv = cloud.get(n);
                 if (!nv.known) {
                     Double dist = v.distance + edge(v.board, n);
-                    if (Double.compare(dist, nv.distance) < 0) {
+                    int steps = v.steps + 1;
+                    int cmp = Double.compare(dist, nv.distance);
+                    if (cmp < 0 || ((cmp==0) && steps<nv.steps)) {
                         nv.distance = dist;
                         nv.prev = v;
+                        nv.steps = steps;
                     }
                     queue.add(nv);
                 }
