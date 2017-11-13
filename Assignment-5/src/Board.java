@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -6,6 +7,7 @@ public class Board {
     private final int[][] blocks;
     public final String state;
     public final int dimension;
+    private ArrayList<Board> neighbors = new ArrayList<>();
 
     public Board(String state) {
         this.blocks = parse(state);
@@ -103,7 +105,14 @@ public class Board {
     @Override
     public int hashCode() { return this.state.hashCode(); }
 
-    public Iterable<Board> neighbors() { return new Neighbors(this.blocks); }
+    public Iterable<Board> neighbors() {
+        if (this.neighbors.size()<1) {
+            for (Board b: new Neighbors(this.blocks)) {
+                this.neighbors.add(b);
+            }
+        }
+        return this.neighbors;
+    }
 
     private class Neighbors implements  Iterable<Board> {
         private int[][] base;
