@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -204,16 +205,19 @@ public class Puzzle {
 
     public static void main(String[] args) throws FileNotFoundException {
         Puzzle p = new Puzzle();
-        File file = new File("C:\\Users\\Sumit\\Documents\\Coding\\COL106-assignments\\Assignment-5\\src\\input.txt");
+        File file = new File(args[0]);
+        PrintWriter writer = new PrintWriter(args[1]);
         Scanner sc = new Scanner(file);
         int N = Integer.parseInt(sc.nextLine());
-        String initial, goal, cost, pi, pc;
+        String initial, goal, cost, pi, pc, out;
 
         initial = sc.next();
         goal = sc.next();
         sc.nextLine();
         cost = sc.nextLine().replaceAll("\\s", "");
-        System.out.println(p.solve(initial, cost, goal));
+        out = p.solve(initial, cost, goal).toString();
+        System.out.println(out);
+        writer.println(out);
         pi = initial;
         pc = cost;
 
@@ -224,8 +228,11 @@ public class Puzzle {
             sc.nextLine();
             cost = sc.nextLine().replaceAll("\\s", "");
 
-            if (initial.equals(pi) && cost.equals(pc)) { System.out.println(p.solution(goal));             }
-            else                                       { System.out.println(p.solve(initial, cost, goal)); }
+            if (initial.equals(pi) && cost.equals(pc)) { out = p.solution(goal).toString();             }
+            else                                       { out = p.solve(initial, cost, goal).toString(); }
+            System.out.println(out);
+            writer.println(out);
         }
+        writer.close();
     }
 }
