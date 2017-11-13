@@ -57,7 +57,7 @@ public class Puzzle {
 
     private void cleanup() { for (Board b: this.cloud.keySet()) { this.cloud.get(b).reset(); } }
 
-    private void dijkstra() {
+    private void dijkstra(String goal) {
         Vertex s = new Vertex(this.initial);
         s.distance = 0;
         s.steps = 0;
@@ -68,6 +68,7 @@ public class Puzzle {
         while (!queue.isEmpty()) {
             v = queue.remove();
             v.known = true;
+            if (v.board.state.equals(goal)) return;
 
             for (Board n: v.board.neighbors()) {
                 if (!cloud.containsKey(n)) { cloud.put(n, new Vertex(n)); }
@@ -94,7 +95,17 @@ public class Puzzle {
         this.initial = new Board(initial);
         this.parseCost(cost);
         this.cleanup();
-        this.dijkstra();
+        this.dijkstra(null);
+    }
+
+    public Solution solve(String initial, String cost, String goal) {
+        if (!isSolvable(initial, goal)) { return new Solution(false); }
+
+        this.initial = new Board(initial);
+        this.parseCost(cost);
+        this.cleanup();
+        this.dijkstra(goal);
+        return new Solution(goal);
     }
 
     private static Boolean isSolvable(String start, String goal) {
@@ -117,16 +128,6 @@ public class Puzzle {
             }
         }
         return ((inversion%2)==0);
-    }
-
-    public Solution solve(String initial, String cost, String goal) {
-        if (!isSolvable(initial, goal)) { return new Solution(false); }
-
-        this.initial = new Board(initial);
-        this.parseCost(cost);
-        this.cleanup();
-        this.dijkstra();
-        return new Solution(goal);
     }
 
     public Solution solution(String goal) {
