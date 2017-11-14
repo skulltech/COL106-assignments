@@ -58,6 +58,8 @@ public class MinPQ< Key extends Comparable<Key> > {
             pq.add(100-i);
         }
 
-        System.out.println(pq.remove());
+        for (int i=0; i<100; i++) {
+            System.out.println(pq.remove());
+        }
     }
 }

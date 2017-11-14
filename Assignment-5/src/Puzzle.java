@@ -11,9 +11,7 @@ public class Puzzle {
     private Board initial;
     private int[] cost;
     private HashMap<Board, Vertex> cloud = new HashMap<>();
-//    private MinPQ<Vertex> queue = new MinPQ<>(181441);
     private PriorityQueue<Vertex> queue = new PriorityQueue<>();
-
 
     private class Vertex implements Comparable<Vertex>{
         public Board board;
@@ -105,9 +103,11 @@ public class Puzzle {
 
         this.initial = new Board(initial);
         this.parseCost(cost);
-        this.cleanup();
         this.dijkstra(goal);
-        return new Solution(goal);
+        Solution sol = new Solution(goal);
+        this.cleanup();
+        this.queue.clear();
+        return sol;
     }
 
     private static Boolean isSolvable(String start, String goal) {
@@ -133,7 +133,8 @@ public class Puzzle {
     }
 
     public Solution solution(String goal) {
-        if (!isSolvable(this.initial.state, goal)) { return new Solution(false); }
+        if (!isSolvable(this.initial.state, goal)) { return new Solution(false);}
+        if (!cloud.get(new Board(goal)).known)     { this.dijkstra(goal); }
         return new Solution(goal);
     }
 
@@ -213,14 +214,14 @@ public class Puzzle {
         PrintWriter writer = new PrintWriter(args[1]);
         Scanner sc = new Scanner(file);
         int N = Integer.parseInt(sc.nextLine());
-        String initial, goal, cost, pi, pc, out;
+        String initial, goal, cost, out, pi, pc;
 
         initial = sc.next();
         goal = sc.next();
         sc.nextLine();
         cost = sc.nextLine().replaceAll("\\s", "");
         out = p.solve(initial, cost, goal).toString();
-        System.out.println(out);
+//        System.out.println(out);
         writer.println(out);
         pi = initial;
         pc = cost;
@@ -231,15 +232,14 @@ public class Puzzle {
             goal = sc.next();
             sc.nextLine();
             cost = sc.nextLine().replaceAll("\\s", "");
-
             if (initial.equals(pi) && cost.equals(pc)) { out = p.solution(goal).toString();             }
             else                                       { out = p.solve(initial, cost, goal).toString(); }
-            System.out.println(out);
+//            System.out.println(out);
             writer.println(out);
         }
         writer.close();
         long et = System.currentTimeMillis();
-        System.out.println();
-        System.out.println("Time taken (in milliseconds): " + (et-st));
+        /*System.out.println();
+        System.out.println("Time taken (in milliseconds): " + (et-st));*/
     }
 }
