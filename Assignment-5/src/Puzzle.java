@@ -11,7 +11,9 @@ public class Puzzle {
     private Board initial;
     private int[] cost;
     private HashMap<Board, Vertex> cloud = new HashMap<>();
+//    private MinPQ<Vertex> queue = new MinPQ<>(181441);
     private PriorityQueue<Vertex> queue = new PriorityQueue<>();
+
 
     private class Vertex implements Comparable<Vertex>{
         public Board board;
