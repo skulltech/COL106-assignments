@@ -205,6 +205,7 @@ public class Puzzle {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
+        long st = System.currentTimeMillis();
         Puzzle p = new Puzzle();
         File file = new File(args[0]);
         PrintWriter writer = new PrintWriter(args[1]);
@@ -235,5 +236,8 @@ public class Puzzle {
             writer.println(out);
         }
         writer.close();
+        long et = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Time taken (in milliseconds): " + (et-st));
     }
 }
