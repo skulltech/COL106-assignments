@@ -46,12 +46,12 @@ public class Puzzle {
     }
 
     private void parseCost(String cost) {
+        String[] split = cost.split("\\s");
         int N = this.initial.state.length() - 1;
         this.cost = new int[N];
 
         for (int i = 0; i < N; i++) {
-            char c = cost.charAt(i);
-            this.cost[i] = Character.getNumericValue(c);
+            this.cost[i] = Integer.parseInt(split[i]);
         }
     }
 
@@ -219,7 +219,7 @@ public class Puzzle {
         initial = sc.next();
         goal = sc.next();
         sc.nextLine();
-        cost = sc.nextLine().replaceAll("\\s", "");
+        cost = sc.nextLine();
         out = p.solve(initial, cost, goal).toString();
 //        System.out.println(out);
         writer.println(out);
@@ -231,7 +231,7 @@ public class Puzzle {
             initial = sc.next();
             goal = sc.next();
             sc.nextLine();
-            cost = sc.nextLine().replaceAll("\\s", "");
+            cost = sc.nextLine();
             if (initial.equals(pi) && cost.equals(pc)) { out = p.solution(goal).toString();             }
             else                                       { out = p.solve(initial, cost, goal).toString(); }
 //            System.out.println(out);
